@@ -1,23 +1,126 @@
-/*
-Copyright 2019 Matthew Vicaradge
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-
-*/
-
-
 #include <Arduboy2.h>
 #include <EEPROM.h>
+#include <ArduboyTones.h>
+
+#define NDUR 100
+#define SDUR 160//200
+#define LDUR 400//500
+
+#define NDUR1 80
+#define SDUR1 120//200
+#define LDUR1 300//500
+
+#define NDUR2 60
+#define SDUR2 80//200
+#define LDUR2 200//500
+
+#define NDUR3 40
+#define SDUR3 40//200
+#define LDUR3 100//500
+
+
+
+
+const uint16_t Score0[] PROGMEM = {
+  NOTE_C4H,LDUR, NOTE_REST,NDUR,
+  NOTE_B3H,LDUR, NOTE_REST,NDUR,
+  NOTE_A3H,LDUR, NOTE_REST,NDUR,
+  NOTE_A3H,SDUR, NOTE_REST,NDUR,
+  NOTE_B3H,SDUR, NOTE_REST,NDUR,
+  NOTE_C4H,SDUR, NOTE_REST,NDUR,
+  NOTE_E4H,SDUR, NOTE_REST,NDUR,
+  NOTE_C4H,SDUR, NOTE_REST,NDUR,
+  NOTE_B3H,SDUR, NOTE_REST,NDUR,
+  NOTE_A3H,LDUR, NOTE_REST,NDUR,
+  NOTE_B3H,SDUR, NOTE_REST,NDUR,
+  NOTE_C4H,SDUR, NOTE_REST,NDUR,
+  NOTE_E4H,SDUR, NOTE_REST,NDUR,
+  NOTE_E4H,LDUR, NOTE_REST,NDUR,
+  NOTE_F4H,SDUR, NOTE_REST,NDUR,
+  NOTE_E4H,SDUR, NOTE_REST,NDUR,
+  NOTE_D4H,SDUR, NOTE_REST,NDUR,
+  NOTE_C4H,SDUR, NOTE_REST,NDUR,
+  NOTE_D4H,SDUR, NOTE_REST,NDUR,
+  NOTE_D4H,SDUR, NOTE_REST,NDUR,
+  NOTE_D4H,LDUR, NOTE_REST,NDUR,
+  NOTE_E4H,SDUR, NOTE_REST,NDUR,
+  NOTE_D4H,SDUR, NOTE_REST,NDUR,
+  NOTE_C4H,SDUR, NOTE_REST,NDUR,
+  NOTE_B3H,SDUR, NOTE_REST,NDUR,
+  
+  
+  
+  
+  TONES_REPEAT
+};
+
+
+const uint16_t Score1[] PROGMEM = {
+  NOTE_C4H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_B3H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_A3H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_A3H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_B3H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_C4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_E4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_C4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_B3H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_A3H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_B3H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_C4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_E4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_E4H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_F4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_E4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_D4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_C4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_D4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_D4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_D4H,LDUR1, NOTE_REST,NDUR1,
+  NOTE_E4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_D4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_C4H,SDUR1, NOTE_REST,NDUR1,
+  NOTE_B3H,SDUR1, NOTE_REST,NDUR1,
+  
+  
+  
+  
+  TONES_REPEAT
+};
+
+const uint16_t Score2[] PROGMEM = {
+  NOTE_C4H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_B3H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_A3H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_A3H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_B3H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_C4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_E4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_C4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_B3H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_A3H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_B3H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_C4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_E4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_E4H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_F4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_E4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_D4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_C4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_D4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_D4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_D4H,LDUR2, NOTE_REST,NDUR2,
+  NOTE_E4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_D4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_C4H,SDUR2, NOTE_REST,NDUR2,
+  NOTE_B3H,SDUR2, NOTE_REST,NDUR2,
+  
+  
+  
+  
+  TONES_REPEAT
+};
+
 
 /*Images used */
 const unsigned char PROGMEM Title[] =
@@ -233,11 +336,12 @@ const byte PROGMEM mummy_Dead[] =
 };
 
 enum State{Right,Left,Up,Down,Dead};
-enum GameState{Load,Game,NextLevel,Win,Lose};
+enum GameState{Load,Game,NextLevel,Win,Lose,Instructions};
 GameState OhMummy;
 
 
 Arduboy2 arduboy;
+ArduboyTones sound(arduboy.audio.enabled);
 Sprites sprites;
 byte frame = 0;
 byte mumframe = 0;
@@ -246,7 +350,6 @@ int stuntime = 60;
 int JP = 0;
 int Level = 5 ;
 int StartUp = 0;
-
 
 #define ANIM_SPEED 4
 #define PLAYER_WIDTH 8
@@ -292,6 +395,8 @@ struct Mummy {
   int mumframe;
   int stunned;
   int type;
+  bool HasBeenStunned;
+  int refSpeed;
 };
 
 struct Bullet {
@@ -317,6 +422,7 @@ int BulletQ = 5;
 int Score =0;
 int HiScore = 0;
 int UpdateScore =0;
+bool mute = false;
 
 /*Background block locations (x,y, active, amount door is closed), where active controls if the player has unlocked the block*/
 int block[8][4] = 	{
@@ -335,29 +441,34 @@ int block[8][4] = 	{
 
 const byte *player_images[] = {player_Right,player_Left,player_Up,player_Down,player_Dead};
 const byte *mummy_images[] 	= {mummy_Right,mummy_Left,mummy_Up,mummy_Down,mummy_Dead};
-/*int Vpath[5] = {4,32,60,88,116};
-int Hpath[3] = {4,28,52};*/
+
 Player player 	= {4,4,2,State::Right,player_Right};
 Mummy mummy[8] 	= {	
-          {116,52,1,State::Right,mummy_Right,1,0,0,0},
-					{60,28,1,State::Right,mummy_Right,0,0,0,1},
-					{32,52,1,State::Right,mummy_Right,0,0,0,1},
-					{88,4,1,State::Right,mummy_Right,0,0,0,0},
-					{88,52,1,State::Right,mummy_Right,0,0,0,0},
-					{32,28,1,State::Right,mummy_Right,0,0,0,0},
-					{116,4,1,State::Right,mummy_Right,0,0,0,0},
-					{116,28,1,State::Right,mummy_Right,0,0,0,0},
+					{116,52,1,State::Right,mummy_Right,1,0,0,0,false,1},
+					{60,28,1,State::Left,mummy_Left,0,0,0,1,false,1},
+					{32,52,1,State::Up,mummy_Up,0,0,0,1,false,1},
+					{88,4,1,State::Down,mummy_Down,0,0,0,0,false,1},
+					{88,52,2,State::Right,mummy_Right,0,0,0,0,false,2},
+					{32,28,2,State::Right,mummy_Right,0,0,0,0,false,2},
+					{116,4,3,State::Right,mummy_Right,0,0,0,0,false,3},
+					{116,28,3,State::Right,mummy_Right,0,0,0,0,false,3},
 					};
+
 Bullet bullet 	= {0,0,4,State::Right,0};
 
 /*Level number and no of mummys*/
-int Levels[5][2]= {
-          {1,1},
-          {2,2},
-          {3,2},
-          {4,3},
-          {5,4},
-         };
+int Levels[10][2]= 	{
+					{1,1},
+					{2,2},
+					{3,2},
+					{4,3},
+					{5,4},
+					{6,4},
+					{7,4},
+					{8,4},
+					{9,5},
+					{10,6},
+					};
 
 
 
@@ -385,10 +496,10 @@ void drawMummy(int mum)
 	if (mummy[mum].Active)
 	{
 		mummy[mum].image = mummy_images[mummy[mum].state];
-    int x = mummy[mum].x;
-    int y = mummy[mum].y;
-    const byte *img = mummy[mum].image;
-    int mumf = mummy[mum].mumframe;
+		int x = mummy[mum].x;
+		int y = mummy[mum].y;
+		const byte *img = mummy[mum].image;
+		int mumf = mummy[mum].mumframe;
 		Sprites::drawSelfMasked(x,y,img,mumf);
 	}
 }
@@ -400,20 +511,18 @@ int bordery = 0;
     
 	for(borderx = 0; borderx < 128; borderx = borderx + 4 ) 
 	{
-      arduboy.drawRect( borderx, 0, 4, 4, WHITE );
-      arduboy.drawRect( borderx, 60, 4, 4, WHITE );
+		arduboy.drawRect( borderx, 0, 4, 4, WHITE );
+		arduboy.drawRect( borderx, 60, 4, 4, WHITE );
     }
     for(bordery = 4; bordery < 60; bordery = bordery + 4 ) 
 	{
-      arduboy.drawRect( 0, bordery, 4, 4, WHITE );
-      arduboy.drawRect( 124, bordery, 4, 4, WHITE );
+		arduboy.drawRect( 0, bordery, 4, 4, WHITE );
+		arduboy.drawRect( 124, bordery, 4, 4, WHITE );
     }
     if(ExitActive==1)
     {
-      arduboy.fillRect( ExitLoc, 0, 8, 4, BLACK );
-      }
-    
-    
+		arduboy.fillRect( ExitLoc, 0, 8, 4, BLACK );
+    }
     for(int r=0;r<8;r++)
     {
         arduboy.fillRect(block[r][0]    ,block[r][1]     ,20,8,WHITE);  
@@ -421,19 +530,18 @@ int bordery = 0;
         arduboy.fillRect(block[r][0] +13,block[r][1]  +8 ,7 ,8,WHITE);  
         if (block[r][2]==0)
         {
-          arduboy.fillRect(block[r][0] +7 ,block[r][1] +8 ,6 ,7,WHITE);
-          arduboy.drawRect(block[r][0] +7 ,block[r][1] +8 ,6 ,8,BLACK);
-          arduboy.drawFastHLine(block[r][0] +9 ,block[r][1] +15 ,2,WHITE);
+			arduboy.fillRect(block[r][0] +7 ,block[r][1] +8 ,6 ,7,WHITE);
+			arduboy.drawRect(block[r][0] +7 ,block[r][1] +8 ,6 ,8,BLACK);
+			arduboy.drawFastHLine(block[r][0] +9 ,block[r][1] +15 ,2,WHITE);
 
         }
         else
         {
-          arduboy.fillRect(block[r][0] +7 ,block[r][1] +8 ,6 ,block[r][3],WHITE);
-          arduboy.drawRect(block[r][0] +7 ,block[r][1] +8 ,6 ,8,BLACK);
-          block[r][3]--;
-          if(block[r][3]<=0)block[r][3] = 0;
+			arduboy.fillRect(block[r][0] +7 ,block[r][1] +8 ,6 ,block[r][3],WHITE);
+			arduboy.drawRect(block[r][0] +7 ,block[r][1] +8 ,6 ,8,BLACK);
+			block[r][3]--;
+			if(block[r][3]<=0)block[r][3] = 0;
         }
-        
         arduboy.drawBitmap(block[KeyLoc][0] +6 ,block[KeyLoc][1] +9,Key ,8 ,8,WHITE);
         arduboy.drawBitmap(block[BulletLoc][0] +6 ,block[BulletLoc][1] +7,BulletImg ,8 ,8,WHITE);
         arduboy.drawBitmap(block[PointsLoc][0] +6 ,block[PointsLoc][1] +8,PointsImg ,8 ,8,WHITE);
@@ -460,17 +568,17 @@ int aLim = 5;
 /*Return the direction to move in order to align to the nearest path*/  
 	if ((objx>closestVpath)&&(objx<closestVpath+aLim))
 	{
-		return(-1);  
+		return -1;  
 	}
 	if ((objx<closestVpath)&&(objx>closestVpath-aLim))
 	{
-		return(1);
+		return 1;
 	}
 	if (objx == closestVpath)
 	{
-		return(0);  
+		return 0;  
 	}
-	return(2);
+	return 2;
 }
 
 int alignH(int objy)	/*Check the nearest allowable Vertical path and returns the direction to it, unless the object 
@@ -481,7 +589,7 @@ int closestHpath=10;
 int res = 0; 
 int aLim = 5;
 
-	for (int i=0;i<=3;i++)
+	for (int i=0;i<3;i++)
 	{
 		res=objy-Hpath[i];
 		if (abs(res)<delta)
@@ -512,14 +620,17 @@ int aLim = 5;
 void setup()
 {
 	arduboy.begin();
-  Serial.begin(9600);
+	Serial.begin(9600);
 	arduboy.clear();
 	arduboy.setFrameRate(30);
-  StartUp = 1;
-  OhMummy = GameState::Load;
-  initEEPROM();
-  EEPROM.get(EEPROM_SCORE,HiScore);
- }
+	StartUp = 1;
+	OhMummy = GameState::Load;
+  sound.tones(Score0);
+	initEEPROM();
+	EEPROM.get(EEPROM_SCORE,HiScore);
+}
+
+
 void loop() 
 {
 int distancex = 200;
@@ -535,534 +646,612 @@ int count=0;
 
 Rect playerRect;
 
-arduboy.clear();
- arduboy.pollButtons();
-
-if(OhMummy==GameState::NextLevel)
-{
-  /*Add up how many blocks were activated and add to score*/
-  
-  if (UpdateScore==1)
-  {
-    for (int r = 0;r<8;r++)
-    {
-      if (block[r][2] == 1)Score = Score+100;
-    }
-    UpdateScore = 0;
-  }
-  player.x = 4;
-  player.y = 4; 
-  
-  mummy[0].x = 116;
-  mummy[0].y = 52;
-  mummy[1].x = 60;
-  mummy[1].y = 28;
-  mummy[2].x = 32;
-  mummy[2].y = 52;       
-  mummy[3].x = 88;
-  mummy[3].y = 4;    
-  mummy[4].x = 88;
-  mummy[4].y = 52;       
-  mummy[5].x = 32;
-  mummy[5].y = 28;     
-  mummy[6].x = 116;
-  mummy[6].y = 4;       
-  mummy[7].x = 116;
-  mummy[7].y = 28;       
-  
-  if(Level==6)
-  {
-    OhMummy=GameState::Win;
-  }
-  else
-  {
-  arduboy.setCursor(41,00);
-  arduboy.print("Level ");
-  arduboy.print(Level);
-
-  arduboy.setCursor(40,15);
-  arduboy.print("Lives ");
-  arduboy.print(Lives);
-
-  arduboy.setCursor(35,25);
-  arduboy.print("Bullets ");
-  arduboy.print(BulletQ);
-
-  arduboy.setCursor(41,35);
-  arduboy.print("Score ");
-  arduboy.print(Score);
-  arduboy.setCursor(35,45);
-  arduboy.print("HiScore ");
-  arduboy.print(HiScore);
-  
-  arduboy.setCursor(5,55);
-  arduboy.print("Press A to Continue");
-  delay(100);
-  StartUp = 1;
-  if (arduboy.justPressed(A_BUTTON))
-     {
-      UpdateScore = 1;
-      OhMummy = GameState::Game;
-     }
-  }
-}
-
-if(OhMummy==GameState::Load)
-{
-  /*Load screen here*/
- arduboy.drawSlowXYBitmap(0,0,Title,128,64,WHITE);
-  if (arduboy.justPressed(A_BUTTON))
-     {
-      Lives = 3;
-      Level=1;
-      BulletQ =5;
-      Score = 0;
-      for (int i=1;i<maxmummys;i++)
-      {
-        mummy[i].Active = 0;
-      }
-      OhMummy = GameState::NextLevel;
-     }
-}
-
-
-
-
-
-if(OhMummy==GameState::Win)
-{
-  
-  arduboy.setCursor(35,00);
-  arduboy.print("You Win");
- 
-
-  arduboy.setCursor(47,10);
-  arduboy.print("Yay ");
-
-  arduboy.setCursor(35,25);
-  arduboy.print("Score ");
-  arduboy.print(Score);
-
-  if (Score>=HiScore)
-  {
-    HiScore = Score;
-    EEPROM.update(EEPROM_START_C1, 'M');
-    EEPROM.update(EEPROM_START_C2, 'V');
-    EEPROM.put(EEPROM_SCORE,HiScore);
-    arduboy.setCursor(20,35);
-    arduboy.print("New HiScore ");
-    arduboy.print(HiScore);
-  }
-  else
-  {
-    arduboy.setCursor(30,35);
-    arduboy.print("HiScore ");
-    arduboy.print(HiScore);
-  }
-  
-  arduboy.setCursor(5,55);
-  arduboy.print("Press A to Continue");
-  delay(100);
-  if (arduboy.justPressed(A_BUTTON))
-     {
-      OhMummy = GameState::Load;
-     }
- }
-
- if(OhMummy==GameState::Lose)
-{
-  
-  arduboy.setCursor(37,00);
-  arduboy.print("You Lose");
- 
-
-  arduboy.setCursor(35,15);
-  arduboy.print("Score ");
-  arduboy.print(Score);
-
-  if (Score>=HiScore)
-  {
-    HiScore = Score;
-    EEPROM.update(EEPROM_START_C1, 'M');
-    EEPROM.update(EEPROM_START_C2, 'V');
-    EEPROM.put(EEPROM_SCORE,HiScore);
-    arduboy.setCursor(20,25);
-    arduboy.print("New HiScore ");
-    arduboy.print(HiScore);
-  }
-  else
-  {
-    arduboy.setCursor(30,25);
-    arduboy.print("HiScore ");
-    arduboy.print(HiScore);
-  }
-  
-  
-  arduboy.setCursor(5,55);
-  arduboy.print("Press A to Continue");
-  if (arduboy.justPressed(A_BUTTON))
-  {
-    OhMummy = GameState::Load;
-  }
- }
-
-  
-if(OhMummy==GameState::Game)
-{
-
-/*Reset all the level control type stuff*/
-
-if (StartUp==1)
-{
-  BulletFound = 0;
-  PointsFound = 0;
-  arduboy.initRandomSeed();
-  KeyLoc =random(0,7);
-  do
-  {
-    BulletLoc = random(0,7);
-  }while (BulletLoc == KeyLoc);
-  do
-  {
-    PointsLoc = random(0,7);
-  }while ((PointsLoc == KeyLoc)||(PointsLoc==BulletLoc));
-  ExitLoc =random(4,116);
-  ExitActive = 0;
-  EEPROM.get(EEPROM_SCORE,HiScore);
-  for (int r = 0;r<8;r++)
-  {
-    block[r][2] = 0;
-    block[r][3] = 8;
-  }
-  mumnum = Levels[Level-1][1];
-  for(int m=0;m<mumnum;m++)
-  {
-    mummy[m].Active = 1;
-  }
-  StartUp = 0;
-}
-
-
-
-
-/**************************************************/
- 
-	if (!(arduboy.nextFrame())) return;
 	arduboy.clear();
-  
-/*Handle player movement inputs, only update the player frame if the player has moved*/
-	if ((arduboy.pressed(LEFT_BUTTON))||(arduboy.pressed(RIGHT_BUTTON)))
-	{
-  Score++;
-		alignHOffset = alignH(player.y);
-		/*if the player is close to an allowable path gravitate to the path, if not then dont allow horizontal movement*/
-		if(alignHOffset<2)
-		{
-			player.y = player.y +(alignHOffset);
+	arduboy.pollButtons();
 
-			if (arduboy.pressed(RIGHT_BUTTON))
+	if(OhMummy==GameState::NextLevel)
+	{
+	  /*Add up how many blocks were activated and add to score*/
+	  sound.noTone();
+		if (UpdateScore==1)
+		{
+			for (int r = 0;r<8;r++)
 			{
-				player.state = State::Right;
-    
-				if(player.x < X_MAX)
-				{
-					player.x = player.x+player.Speed;
-					
-					if (arduboy.everyXFrames(ANIM_SPEED)) 
-					{
-						frame++;
-					}
-				}
+				if (block[r][2] == 1)Score = Score+100;
 			}
-			else if (arduboy.pressed(LEFT_BUTTON))
-			{
-				player.state = State::Left;
-    
-				if(player.x > 4)
-				{
-					player.x = player.x-player.Speed;
-					
-					if (arduboy.everyXFrames(ANIM_SPEED)) 
-					{
-						frame++;
-					}
-				}
-			}
+			UpdateScore = 0;
 		}
-	}
-	else if ((arduboy.pressed(UP_BUTTON))||(arduboy.pressed(DOWN_BUTTON)))
-	{
-    Score++;
-    if(ExitActive==1)
-    {
-      if (arduboy.pressed(UP_BUTTON)&&(player.y==4)&&(player.x<=ExitLoc+2)&&(player.x>=ExitLoc-2))
-      {
-        
-        player.state = State::Up;
-        Level++;
-        Score=Score +500;
-        OhMummy = GameState::NextLevel;
-      }
-    }
-  
-		alignVOffset = alignV(player.x);
-		/*if the player is close to an allowable path gravitate to the path, if not then dont allow vertical movement*/
-		if(alignVOffset<2)
-		{
-			player.x = player.x +(alignVOffset);
-			
-			if (arduboy.pressed(UP_BUTTON))
-			{
-				player.state = State::Up;
-
-				if (player.y > 4)
-				{
-					player.y = player.y-player.Speed;
-					
-					if (arduboy.everyXFrames(ANIM_SPEED))
-					{
-						frame++;
-					}    
-				}
-			}
-			else if (arduboy.pressed(DOWN_BUTTON))
-			{
-				player.state = State::Down;
-				
-				if (player.y < Y_MAX)
-				{
-					player.y = player.y+player.Speed;
-
-					if (arduboy.everyXFrames(ANIM_SPEED))
-					{
-						frame++;
-					}
-				}
-			}
-		}
-	}
-/*Deal with the mummys*/
-
-	/*Check if the mummy is close to a path*/
-	for (int i = 0;i<maxmummys;i++)
-	{
-		if(mummy[i].Active)
-		{
-			alignVOffset = alignV(mummy[i].x);
-			alignHOffset = alignH(mummy[i].y);
-			/*if the mummy is at a crossroads allow a direction change or if type 1 take a random turn*/
-			if ((alignHOffset==0)&&(alignVOffset==0))
-			{
-				if(mummy[i].type==1)
-       {
-				arduboy.initRandomSeed();
-				randnum =random(1,12);
-       if(randnum==1)mummy[i].state = State::Right;
-       if(randnum==2)mummy[i].state = State::Left;
-       if(randnum==3)mummy[i].state = State::Up;
-       if(randnum==4)mummy[i].state = State::Down;
-       if(randnum==5)mummy[i].type = 0;
-       
-       }else{
-  arduboy.initRandomSeed();
-        randnum =random(1,12);
-       if(randnum==1)mummy[i].type = 1;
-        
-				/*decide which is the shorter route to the player_Left*/
-				DeltaX = (mummy[i].x - player.x);
-				DeltaX = abs(DeltaX);
-				DeltaY = (mummy[i].y - player.y);
-				DeltaY = abs(DeltaY);
+		
+		player.x = 4;
+		player.y = 4; 
 		  
-				if (DeltaX>DeltaY)
-				{
-					if(mummy[i].x < player.x)
-					{
-						mummy[i].state = State::Right;
-					}
-					else if(mummy[i].x > player.x)
-					{
-						mummy[i].state = State::Left;
-					}
-				}
-				else
-				{
-					if(mummy[i].y < player.y)
-					{
-						mummy[i].state = State::Down;
-					}
-					else if(mummy[i].y > player.y)
-					{
-						mummy[i].state = State::Up;
-					}
-				} 
-			}
-			}
-			/*once direction is decided move in that direction*/
-			if(mummy[i].state == State::Right)
-			{
-				mummy[i].x = mummy[i].x+mummy[i].Speed;
-			}
-			if(mummy[i].state == State::Left)
-			{
-				mummy[i].x = mummy[i].x-mummy[i].Speed;
-			}
-			if(mummy[i].state == State::Down)
-			{
-				mummy[i].y = mummy[i].y+mummy[i].Speed;
-			}
-			if(mummy[i].state == State::Up)
-			{
-				mummy[i].y = mummy[i].y-mummy[i].Speed;
-			}
-			/*limit the movement within the bounds of the screen*/
-			if(mummy[i].x<4) mummy[i].x=4;
-			if(mummy[i].x>X_MAX) mummy[i].x=X_MAX;
-			if(mummy[i].y<4) mummy[i].y=4;
-			if(mummy[i].y>Y_MAX) mummy[i].y=Y_MAX;
-		}
-	}	
+		mummy[0].x = 116;
+		mummy[0].y = 52;
+		mummy[1].x = 60;
+		mummy[1].y = 28;
+		mummy[2].x = 32;
+		mummy[2].y = 52;       
+		mummy[3].x = 88;
+		mummy[3].y = 4;    
+		mummy[4].x = 88;
+		mummy[4].y = 52;       
+		mummy[5].x = 32;
+		mummy[5].y = 28;     
+		mummy[6].x = 116;
+		mummy[6].y = 4;       
+		mummy[7].x = 116;
+		mummy[7].y = 28;       
 
-	/*does the player shoot?*/
+		if(Level==11)
+		{
+			OhMummy=GameState::Win;
+		}
+		else
+		{
+			arduboy.setCursor(41,00);
+			arduboy.print("Level ");
+			arduboy.print(Level);
 
-	if (arduboy.pressed(B_BUTTON)&&(bullet.Active==0)&&(BulletQ>0))
-	{
-		BulletQ--;
-    if (BulletQ<0)BulletQ = 0;
-		bullet.Active = 1;
-		bullet.x = player.x+4;
-		bullet.y = player.y+4;
-		/*set bullet direction to same as player*/
-		bullet.state = player.state;
-	}
-	if (bullet.Active)
-	{
-		if (bullet.state == State::Right)
-		{
-			bullet.x = bullet.x+bullet.Speed;
+			arduboy.setCursor(40,15);
+			arduboy.print("Lives ");
+			arduboy.print(Lives);
+
+			arduboy.setCursor(35,25);
+			arduboy.print("Bullets ");
+			arduboy.print(BulletQ);
+
+			arduboy.setCursor(41,35);
+			arduboy.print("Score ");
+			arduboy.print(Score);
+			arduboy.setCursor(35,45);
+			arduboy.print("HiScore ");
+			arduboy.print(HiScore);
+
+			arduboy.setCursor(5,55);
+			arduboy.print("Press A to Continue");
+
+			StartUp = 1;
+
+			if (arduboy.justPressed(A_BUTTON))
+			{
+				UpdateScore = 1;
+				OhMummy = GameState::Game;
+			}
 		}
-		if (bullet.state == State::Left)
-		{
-			bullet.x = bullet.x-bullet.Speed;
-		}
-		if (bullet.state == State::Down)
-		{
-			bullet.y = bullet.y+bullet.Speed;
-		}
-		if (bullet.state == State::Up)   
-		{
-			bullet.y = bullet.y-bullet.Speed;
-		}
-		drawBullet();  
 	}
 
+else if(OhMummy==GameState::Instructions)
+	{
+		arduboy.setCursor(25,00);
+		arduboy.print("Move Around");
+		
+		arduboy.setCursor(10,15);
+		arduboy.print("Open Doors with A");
+		
+		arduboy.setCursor(25,25);
+		arduboy.print("Shoot with B");
 
-
-
-
-  /*Check to see if treasure is activated*/
-/*control the mummys for testing*/
-  if (arduboy.pressed(A_BUTTON))
-  {
-    playerRect = {player.x,player.y,8,8};
-    for (int i =0;i<8;i++)
+    arduboy.setCursor(30,35);
+    
+    if (mute)
     {
-      Rect BlockRect = {block[i][0]+7,block[i][1]+20,4,8};
-      if (arduboy.collide(playerRect,BlockRect))
-      {
-        block[i][2] = 1;
-        if (i==KeyLoc) ExitActive = 1;
-        if (i==BulletLoc)
-        {
-          if(BulletFound==0)
-          {
-            BulletQ++;
-            BulletFound=1;
-          }
-        }
-        if (i==PointsLoc)
-        {
-          if(PointsFound==0)
-          {
-            Score=Score+1000;
-            PointsFound = 1;
-          }
-        }
-      }
+      arduboy.print("Sound: OFF");
     }
-  }
-   
-	
-	/*Collision detection*/
-	for (int i = 0;i<maxmummys;i++)
-	{
-		if(mummy[i].Active)
+    else
+    {
+      arduboy.print("Sound: ON");
+    }
+		
+		arduboy.setCursor(25,45);
+		arduboy.print("HiScore ");
+		arduboy.print(HiScore);
+
+		arduboy.setCursor(5,55);
+    arduboy.print("Press A to Continue");
+		if (arduboy.justPressed(A_BUTTON))
 		{
-			Rect playerRect = {player.x,player.y,4,8};
-			Rect mummyRect  = {mummy[i].x,mummy[i].y,6,8};
-			Rect bulletRect = {bullet.x,bullet.y,2,2};
-
-  		if ((bullet.Active)&&(arduboy.collide(bulletRect, mummyRect)))
-			{
-				bullet.Active = 0;
-				mummy[i].Speed = 0;
-        mummy[i].stunned = stuntime;
-			}
-
-      if (mummy[i].stunned>0)
+			OhMummy = GameState::Load;
+		}
+    if (arduboy.justPressed(B_BUTTON))
+    {
+      if(mute)
       {
-        mummy[i].stunned--;  
+       mute = false; 
+       sound.tones(Score0); 
       }
       else 
       {
-        mummy[i].stunned = 0;
-        mummy[i].Speed = 1;
+       mute = true;
+       sound.noTone();
       }
+    }
+		
+	}
 
-      
-			if (arduboy.collide(playerRect, mummyRect))
+	else if(OhMummy==GameState::Load)
+	{
+		/*Load screen here*/
+		arduboy.drawSlowXYBitmap(0,0,Title,128,64,WHITE);
+		 if(!mute)
+    {
+      if (!sound.playing())
+      {
+       sound.tones(Score0);
+      }
+    }
+		if (arduboy.justPressed(A_BUTTON))
+		{
+			Lives = 3;
+			Level=1;
+			BulletQ =5;
+			Score = 0;
+			for (int i=1;i<maxmummys;i++)
 			{
-        Lives--;
-        if(Lives==0)
-        {
-				  OhMummy = GameState::Lose;
-        }
-        else
-        {
-          OhMummy = GameState::NextLevel;
-        }
-			  
+				mummy[i].Active = 0;
 			}
-		  
-			if (mummy[i].Speed>0)
+			OhMummy = GameState::NextLevel;
+		}
+		if (arduboy.justPressed(B_BUTTON))
+		{
+			OhMummy = GameState::Instructions;
+		}
+		
+	}
+
+	else if(OhMummy==GameState::Win)
+	{
+
+     if(!mute)
+    {
+      if (!sound.playing())
+      {
+       sound.tones(Score0);
+      }
+    }
+  
+		arduboy.setCursor(35,00);
+		arduboy.print("You Win");
+		arduboy.setCursor(47,10);
+		arduboy.print("Yay ");
+		arduboy.setCursor(35,25);
+		arduboy.print("Score ");
+		arduboy.print(Score);
+
+		if (Score>=HiScore)
+		{
+			HiScore = Score;
+			EEPROM.update(EEPROM_START_C1, 'M');
+			EEPROM.update(EEPROM_START_C2, 'V');
+			EEPROM.put(EEPROM_SCORE,HiScore);
+			arduboy.setCursor(20,35);
+			arduboy.print("New HiScore ");
+			arduboy.print(HiScore);
+		}
+		else
+		{
+			arduboy.setCursor(30,35);
+			arduboy.print("HiScore ");
+			arduboy.print(HiScore);
+		}
+		arduboy.setCursor(5,55);
+		arduboy.print("Press A to Continue");
+
+		if (arduboy.justPressed(A_BUTTON))
+		{
+			OhMummy = GameState::Load;
+		}
+	}
+
+	else if(OhMummy==GameState::Lose)
+	{
+    if(!mute)
+    {
+      if (!sound.playing())
+      {
+        sound.tones(Score0);
+      }
+    }
+    	  
+		arduboy.setCursor(37,00);
+		arduboy.print("You Lose");
+
+		arduboy.setCursor(35,15);
+		arduboy.print("Score ");
+		arduboy.print(Score);
+
+		if (Score>=HiScore)
+		{
+			HiScore = Score;
+			EEPROM.update(EEPROM_START_C1, 'M');
+			EEPROM.update(EEPROM_START_C2, 'V');
+			EEPROM.put(EEPROM_SCORE,HiScore);
+			arduboy.setCursor(20,25);
+			arduboy.print("New HiScore ");
+			arduboy.print(HiScore);
+		}
+		else
+		{
+			arduboy.setCursor(30,25);
+			arduboy.print("HiScore ");
+			arduboy.print(HiScore);
+		}
+			arduboy.setCursor(5,55);
+			arduboy.print("Press A to Continue");
+		if (arduboy.justPressed(A_BUTTON))
+		{
+			OhMummy = GameState::Load;
+		}
+	}
+
+	  
+		else if(OhMummy==GameState::Game)
+		{
+		/*Reset all the level control type stuff*/
+    if(!mute)
+    {
+      if (!sound.playing())
+      {
+        if(Level<=3)sound.tones(Score0);
+        else if(Level<=5)sound.tones(Score1);
+        else if(Level<=10)sound.tones(Score2);
+      }
+    }
+		if (StartUp==1)
+		{
+			BulletFound = 0;
+			PointsFound = 0;
+			arduboy.initRandomSeed();
+			KeyLoc =random(0,7);
+			
+			do
 			{
-				if (arduboy.everyXFrames(ANIM_SPEED))
+				BulletLoc = random(0,7);
+			}while (BulletLoc == KeyLoc);
+			
+			do
+			{
+				PointsLoc = random(0,7);
+			}while ((PointsLoc == KeyLoc)||(PointsLoc==BulletLoc));
+			
+			ExitLoc =random(4,116);
+			ExitActive = 0;
+			EEPROM.get(EEPROM_SCORE,HiScore);
+			
+			for (int r = 0;r<8;r++)
+			{
+				block[r][2] = 0;
+				block[r][3] = 8;
+			}
+			mumnum = Levels[Level-1][1];
+			
+			for(int m=0;m<mumnum;m++)
+			{
+				mummy[m].Active = 1;
+			}
+			StartUp = 0;
+		}
+
+		if (!(arduboy.nextFrame())) return;
+		arduboy.clear();
+		  
+		/*Handle player movement inputs, only update the player frame if the player has moved*/
+			if ((arduboy.pressed(LEFT_BUTTON))||(arduboy.pressed(RIGHT_BUTTON)))
+			{
+				Score++;
+				alignHOffset = alignH(player.y);
+				/*if the player is close to an allowable path gravitate to the path, if not then dont allow horizontal movement*/
+				if(alignHOffset<2)
 				{
-					mummy[i].mumframe++;
+					player.y = player.y +(alignHOffset);
+
+					if (arduboy.pressed(RIGHT_BUTTON))
+					{
+						player.state = State::Right;
+			
+						if(player.x < X_MAX)
+						{
+							player.x = player.x+player.Speed;
+							
+							if (arduboy.everyXFrames(ANIM_SPEED)) 
+							{
+								frame++;
+							}
+						}
+					}
+					else if (arduboy.pressed(LEFT_BUTTON))
+					{
+						player.state = State::Left;
+			
+						if(player.x > 4)
+						{
+							player.x = player.x-player.Speed;
+							
+							if (arduboy.everyXFrames(ANIM_SPEED)) 
+							{
+								frame++;
+							}
+						}
+					}
 				}
 			}
-			if (mummy[i].mumframe>1)
+			else if ((arduboy.pressed(UP_BUTTON))||(arduboy.pressed(DOWN_BUTTON)))
 			{
-				mummy[i].mumframe = 0;
-			}
-		}
-	}
-	if (frame>1)
-	{
-		frame = 0;
-	}
-		
-	for (int i = 0;i<maxmummys;i++)
-	{
-		if(mummy[i].Active)
-		{
-			drawMummy(i);
-		}
-	}
-	
-	drawPlayer();
-	drawBorder();
+				Score++;
+				if(ExitActive==1)
+				{
+					if (arduboy.pressed(UP_BUTTON)&&(player.y==4)&&(player.x<=ExitLoc+2)&&(player.x>=ExitLoc-2))
+					{
+						player.state = State::Up;
+						Level++;
+						Score=Score +500;
+						OhMummy = GameState::NextLevel;
+					}
+				}
+			  
+				alignVOffset = alignV(player.x);
+				/*if the player is close to an allowable path gravitate to the path, if not then dont allow vertical movement*/
+				if(alignVOffset<2)
+				{
+					player.x = player.x +(alignVOffset);
+				
+					if (arduboy.pressed(UP_BUTTON))
+					{
+						player.state = State::Up;
 
-}
-   arduboy.display();
+						if (player.y > 4)
+						{
+							player.y = player.y-player.Speed;
+							
+							if (arduboy.everyXFrames(ANIM_SPEED))
+							{
+								frame++;
+							}    
+						}
+					}
+					else if (arduboy.pressed(DOWN_BUTTON))
+					{
+						player.state = State::Down;
+						
+						if (player.y < Y_MAX)
+						{
+							player.y = player.y+player.Speed;
+
+							if (arduboy.everyXFrames(ANIM_SPEED))
+							{
+								frame++;
+							}
+						}
+					}
+				}
+			}
+
+			/*Deal with the mummys*/
+			/*Check if the mummy is close to a path*/
+			for (int i = 0;i<maxmummys;i++)
+			{
+				if(mummy[i].Active)
+				{
+					alignVOffset = alignV(mummy[i].x);
+					alignHOffset = alignH(mummy[i].y);
+					/*if the mummy is at a crossroads allow a direction change or if type 1 take a random turn*/
+					if ((alignHOffset==0)&&(alignVOffset==0))
+					{
+						if(mummy[i].type==1)
+						{
+							arduboy.initRandomSeed();
+							randnum =random(1,12);
+						   if(randnum==1)mummy[i].state = State::Right;
+						   if(randnum==2)mummy[i].state = State::Left;
+						   if(randnum==3)mummy[i].state = State::Up;
+						   if(randnum==4)mummy[i].state = State::Down;
+						   if(randnum==5)mummy[i].type = 0;
+						}
+						else
+						{
+							arduboy.initRandomSeed();
+							randnum =random(1,12);
+
+							if(randnum==1)mummy[i].type = 1;
+
+							/*decide which is the shorter route to the player_Left*/
+							DeltaX = (mummy[i].x - player.x);
+							DeltaX = abs(DeltaX);
+							DeltaY = (mummy[i].y - player.y);
+							DeltaY = abs(DeltaY);
+					  
+							if (DeltaX>DeltaY)
+							{
+								if(mummy[i].x < player.x)
+								{
+									mummy[i].state = State::Right;
+								}
+								else if(mummy[i].x > player.x)
+								{
+									mummy[i].state = State::Left;
+								}
+							}
+							else
+							{
+								if(mummy[i].y < player.y)
+								{
+									mummy[i].state = State::Down;
+								}
+								else if(mummy[i].y > player.y)
+								{
+									mummy[i].state = State::Up;
+								}
+							} 
+						}
+					}
+					/*once direction is decided move in that direction*/
+					if(mummy[i].state == State::Right)
+					{
+						mummy[i].x = mummy[i].x+mummy[i].Speed;
+					}
+					if(mummy[i].state == State::Left)
+					{
+						mummy[i].x = mummy[i].x-mummy[i].Speed;
+					}
+					if(mummy[i].state == State::Down)
+					{
+						mummy[i].y = mummy[i].y+mummy[i].Speed;
+					}
+					if(mummy[i].state == State::Up)
+					{
+						mummy[i].y = mummy[i].y-mummy[i].Speed;
+					}
+					/*limit the movement within the bounds of the screen*/
+					if(mummy[i].x<4) 		mummy[i].x=4;
+					if(mummy[i].x>X_MAX) 	mummy[i].x=X_MAX;
+					if(mummy[i].y<4)		mummy[i].y=4;
+					if(mummy[i].y>Y_MAX) 	mummy[i].y=Y_MAX;
+				}
+			}	
+
+			/*does the player shoot?*/
+			if (arduboy.pressed(B_BUTTON)&&(bullet.Active==0)&&(BulletQ>0))
+			{
+				BulletQ--;
+				if (BulletQ<0)BulletQ = 0;
+				bullet.Active = 1;
+				bullet.x = player.x+4;
+				bullet.y = player.y+4;
+				/*set bullet direction to same as player*/
+				bullet.state = player.state;
+			}
+			
+			if (bullet.Active)
+			{
+				if (bullet.state == State::Right)
+				{
+					bullet.x = bullet.x+bullet.Speed;
+				}
+				if (bullet.state == State::Left)
+				{
+					bullet.x = bullet.x-bullet.Speed;
+				}
+				if (bullet.state == State::Down)
+				{
+					bullet.y = bullet.y+bullet.Speed;
+				}
+				if (bullet.state == State::Up)   
+				{
+					bullet.y = bullet.y-bullet.Speed;
+				}
+				drawBullet();  
+			}
+
+			/*Check to see if treasure is activated*/
+			/*control the mummys for testing*/
+			if (arduboy.pressed(A_BUTTON))
+			{
+				playerRect = {player.x,player.y,8,8};
+				for (int i =0;i<8;i++)
+				{
+					Rect BlockRect = {block[i][0]+7,block[i][1]+20,4,8};
+
+					if (arduboy.collide(playerRect,BlockRect))
+					{
+						block[i][2] = 1;
+
+						if (i==KeyLoc) ExitActive = 1;
+						if (i==BulletLoc)
+						{
+							if(BulletFound==0)
+							{
+								BulletQ++;
+								BulletFound=1;
+							}
+						}
+						if (i==PointsLoc)
+						{
+							if(PointsFound==0)
+							{
+								Score=Score+1000;
+								PointsFound = 1;
+							}
+						}
+					}
+				}
+			}
+
+		/*Collision detection*/
+			for (int i = 0;i<maxmummys;i++)
+			{
+				if(mummy[i].Active)
+				{
+					Rect playerRect = {player.x,player.y,4,8};
+					Rect mummyRect  = {mummy[i].x,mummy[i].y,6,8};
+					Rect bulletRect = {bullet.x,bullet.y,2,2};
+
+					if ((bullet.Active)&&(arduboy.collide(bulletRect, mummyRect)))
+					{
+						bullet.Active = 0;
+						mummy[i].Speed = 0;
+						mummy[i].stunned = stuntime;
+            mummy[i].HasBeenStunned = true;
+					}
+
+					if (mummy[i].stunned>0)
+					{
+						mummy[i].stunned--;  
+					}
+					else 
+					{
+						mummy[i].stunned = 0;
+           if(mummy[i].HasBeenStunned)
+           {
+						mummy[i].Speed = 1;
+           }
+           else
+           {
+            mummy[i].Speed = mummy[i].refSpeed;
+           }
+					}
+					
+					if (arduboy.collide(playerRect, mummyRect))
+					{
+						Lives--;
+						if(Lives==0)
+						{
+							OhMummy = GameState::Lose;
+              sound.noTone();
+						}
+						else
+						{
+							OhMummy = GameState::NextLevel;
+						}
+					}
+
+					if (mummy[i].Speed>0)
+					{
+						if (arduboy.everyXFrames(ANIM_SPEED))
+						{
+							mummy[i].mumframe++;
+						}
+					}
+					if (mummy[i].mumframe>1)
+					{
+						mummy[i].mumframe = 0;
+					}
+				}
+			}
+
+			if (frame>1)
+			{
+				frame = 0;
+			}
+
+			for (int i = 0;i<maxmummys;i++)
+			{
+				if(mummy[i].Active)
+				{
+					drawMummy(i);
+				}
+			}
+
+			drawPlayer();
+			drawBorder();
+		}
+	arduboy.display();
 }
